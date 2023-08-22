@@ -8,3 +8,18 @@ export const MainPage = styled.div`
   box-shadow: ${({ theme }) => theme.shadows.regular};
   border-radius: ${({ theme }) => theme.spacing(1)};
 `;
+export const Button = styled.button`
+  display: block;
+  margin: 80px auto 0;
+  width: 150px;
+  padding: 8px 16px;
+  font: inherit;
+  cursor: pointer;
+  border-radius: ${({ theme }) => theme.spacing(1)};
+  border: 1px solid ${({ theme }) => theme.colors.dark};
+  color: ${({ theme }) => theme.colors.dark};
+  font-size: ${({ theme }) => theme.fontSizes.medium};
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.accent};
+  }
+`;

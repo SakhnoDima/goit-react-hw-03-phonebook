@@ -16,7 +16,10 @@ class Forms extends Component {
   };
   schema = object({
     name: string().required('Name is required!'),
-    number: string().required().min(10, 'Too Short!').max(13, 'Too Short!'),
+    number: string()
+      .required('Number is required!')
+      .min(10, 'Too Short!')
+      .max(13, 'Too Long!'),
   });
   idNameForm = nanoid();
   idTelForm = nanoid();
@@ -32,38 +35,40 @@ class Forms extends Component {
 
   render() {
     return (
-      <Formik
-        initialValues={this.state}
-        onSubmit={this.handleSubmit}
-        validationSchema={this.schema}
-      >
-        <Forma autoComplete="off">
-          <Label htmlFor={this.idNameForm}>
-            Name
-            <Input
-              type="text"
-              name="name"
-              id={this.idNameForm}
-              pattern="^[a-zA-Zа-яА-Я]+(([' \-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-            />
-            <ErrorMessage component={Error} name="name" />
-          </Label>
-          <Label htmlFor={this.idTelForm}>
-            Number
-            <Input
-              id={this.idTelForm}
-              type="tel"
-              name="number"
-              pattern="\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}"
-            />
-            <ErrorMessage component={Error} name="number" />
-          </Label>
+      <>
+        <Formik
+          initialValues={this.state}
+          onSubmit={this.handleSubmit}
+          validationSchema={this.schema}
+        >
+          <Forma autoComplete="off">
+            <Label htmlFor={this.idNameForm}>
+              Name
+              <Input
+                type="text"
+                name="name"
+                id={this.idNameForm}
+                pattern="^[a-zA-Zа-яА-Я]+(([' \-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+              />
+              <ErrorMessage component={Error} name="name" />
+            </Label>
+            <Label htmlFor={this.idTelForm}>
+              Number
+              <Input
+                id={this.idTelForm}
+                type="tel"
+                name="number"
+                pattern="\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}"
+              />
+              <ErrorMessage component={Error} name="number" />
+            </Label>
 
-          <Button type="submit" title={'Add contact'}>
-            Add contact
-          </Button>
-        </Forma>
-      </Formik>
+            <Button type="submit" title={'Add contact'}>
+              Add contact
+            </Button>
+          </Forma>
+        </Formik>
+      </>
     );
   }
 }

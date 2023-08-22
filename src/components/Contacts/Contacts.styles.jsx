@@ -34,3 +34,8 @@ export const Button = styled.button`
     background-color: ${({ theme }) => theme.colors.accent};
   }
 `;
+export const Error = styled.h2`
+  margin-top: 16px;
+  text-align: center;
+  color: ${({ theme }) => theme.colors.error};
+`;

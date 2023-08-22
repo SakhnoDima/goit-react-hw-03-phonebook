@@ -1,27 +1,45 @@
 import { Component } from 'react';
 import { nanoid } from 'nanoid';
+import { AiOutlineCloseCircle } from 'react-icons/ai';
 
-import Forms from './Form';
+import Forms, { IconButton, Modal } from './Form';
 import Contacts from './Contacts';
 import Filter from './Filter';
-import { MainPage } from './styles/App.styles';
+import { MainPage, Button } from './styles/App.styles';
 
 export class App extends Component {
   state = {
     contacts: [
-      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+      // { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+      // { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+      // { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+      // { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
+    showModal: false,
+  };
+  open = true;
+  KAY_LS = 'Cont';
+  // === дістаю з LS ===
+  componentDidMount() {
+    const fromLs = localStorage.getItem(this.KAY_LS);
+    const parseContacts = JSON.parse(fromLs);
+    if (parseContacts) this.setState({ contacts: parseContacts }); // перевірка на пустий LS
+  }
+  // === записую в LS ===
+  componentDidUpdate(prevProps) {
+    if (this.state.contacts !== prevProps.contact) {
+      localStorage.setItem(this.KAY_LS, JSON.stringify(this.state.contacts));
+    }
+  }
+  // === тогл модалки ===
+  modalToggle = () => {
+    this.setState(({ showModal }) => ({ showModal: !showModal }));
   };
   // === сабміт форми ===
-
   formSubmitData = ({ name, number }) => {
     const { contacts } = this.state;
     // ===  перевірка на вже існуюче ім'я ===
-
     const includeName = contacts.some(
       contact => contact.name.toLowerCase().trim() === name.toLowerCase().trim()
     );
@@ -38,46 +56,60 @@ export class App extends Component {
   };
 
   // === ім'я в полі фільтру ===
-
   onFilterChange = event => {
     this.setState({ filter: event.currentTarget.value });
   };
 
   // === фільтруємо по імені ===
-
   filterContacts = () => {
     const { contacts, filter } = this.state;
     const normalizeFilter = filter.toLowerCase();
 
-    return contacts.filter(({ name }) => {
+    const filteredContacts = contacts.filter(({ name }) => {
       return name.toLowerCase().includes(normalizeFilter);
     });
+    if (filteredContacts.length === 0) {
+      //! додав помилку якщо контактів по фільтру не знайшли
+      this.open = false;
+      return;
+    }
+    this.open = true;
+
+    return filteredContacts;
   };
 
   // === видаляю контакт ===
-
   deleteContact = idCard => {
     this.setState(prevState => ({
       contacts: prevState.contacts.filter(({ id }) => id !== idCard),
     }));
   };
+
   render() {
-    const { contacts } = this.state;
-    const { filter } = this.state;
+    const { filter, showModal } = this.state;
     const filteredContacts = this.filterContacts();
     return (
       <MainPage>
         <h1 style={{ textAlign: 'center' }}>Phonebook</h1>
         <Forms onSubmit={this.formSubmitData} />
-        {contacts.length > 0 && (
-          <>
-            <h2 style={{ textAlign: 'center' }}>Contacts</h2>
-            <Filter value={filter} onChange={this.onFilterChange} />
-            <Contacts
-              contacts={filteredContacts}
-              onDeleteContacts={this.deleteContact}
-            />
-          </>
+        <Button type="button" onClick={this.modalToggle}>
+          All Cntacts
+        </Button>
+        {showModal && (
+          <Modal onCloses={this.modalToggle}>
+            <>
+              <IconButton onClick={this.modalToggle}>
+                <AiOutlineCloseCircle />
+              </IconButton>
+              <h2 style={{ textAlign: 'center' }}>Contacts</h2>
+              <Filter value={filter} onChange={this.onFilterChange} />
+              <Contacts
+                isOpen={this.open}
+                contacts={filteredContacts}
+                onDeleteContacts={this.deleteContact}
+              />
+            </>
+          </Modal>
         )}
       </MainPage>
     );
