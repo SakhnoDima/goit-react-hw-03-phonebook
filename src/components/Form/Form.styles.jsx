@@ -1,6 +1,7 @@
 import styled from 'styled-components';
+import { Form, Field } from 'formik';
 
-export const Forms = styled.form`
+export const Forma = styled(Form)`
   margin: 16px auto;
   display: flex;
   flex-direction: column;
@@ -17,7 +18,7 @@ export const Label = styled.label`
   color: ${({ theme }) => theme.colors.dark};
   font-size: 20px;
 `;
-export const Input = styled.input`
+export const Input = styled(Field)`
   outline: 0;
   border: 1px solid ${({ theme }) => theme.colors.dark};
   padding: 8px 12px;
@@ -40,4 +41,8 @@ export const Button = styled.button`
   &:hover {
     background-color: ${({ theme }) => theme.colors.accent};
   }
+`;
+export const Error = styled.h3`
+  color: red;
+  text-align: center;
 `;

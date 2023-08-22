@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { nanoid } from 'nanoid';
 
-import Form from './Form';
+import Forms from './Form';
 import Contacts from './Contacts';
 import Filter from './Filter';
 import { MainPage } from './styles/App.styles';
@@ -68,7 +68,7 @@ export class App extends Component {
     return (
       <MainPage>
         <h1 style={{ textAlign: 'center' }}>Phonebook</h1>
-        <Form onSubmit={this.formSubmitData} />
+        <Forms onSubmit={this.formSubmitData} />
         {contacts.length > 0 && (
           <>
             <h2 style={{ textAlign: 'center' }}>Contacts</h2>
