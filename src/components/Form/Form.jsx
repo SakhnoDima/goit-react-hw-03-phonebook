@@ -11,9 +11,7 @@ class Forms extends Component {
     name: '',
     number: '',
   };
-  static propTypes = {
-    onSubmit: PropTypes.func.isRequired,
-  };
+
   schema = object({
     name: string().required('Name is required!'),
     number: string()

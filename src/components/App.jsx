@@ -24,7 +24,8 @@ export class App extends Component {
   componentDidMount() {
     const fromLs = localStorage.getItem(this.KAY_LS);
     const parseContacts = JSON.parse(fromLs);
-    if (parseContacts) this.setState({ contacts: parseContacts }); // перевірка на пустий LS
+    if (parseContacts || parseContacts?.length)
+      this.setState({ contacts: parseContacts }); // перевірка на пустий LS
   }
   // === записую в LS ===
   componentDidUpdate(prevProps) {
