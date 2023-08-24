@@ -7,6 +7,8 @@ import Contacts from './Contacts';
 import Filter from './Filter';
 import { MainPage, Button } from './styles/App.styles';
 
+const KEY_LS = 'cont';
+
 export class App extends Component {
   state = {
     contacts: [
@@ -17,20 +19,19 @@ export class App extends Component {
     ],
     filter: '',
     showModal: false,
+    open: true,
   };
-  open = true;
-  KAY_LS = 'Cont';
+
   // === дістаю з LS ===
   componentDidMount() {
-    const fromLs = localStorage.getItem(this.KAY_LS);
+    const fromLs = localStorage.getItem(this.KEY_LS);
     const parseContacts = JSON.parse(fromLs);
-    if (parseContacts || parseContacts?.length)
-      this.setState({ contacts: parseContacts }); // перевірка на пустий LS
+    if (parseContacts) this.setState({ contacts: parseContacts }); // перевірка на пустий LS
   }
   // === записую в LS ===
   componentDidUpdate(prevProps) {
     if (this.state.contacts !== prevProps.contact) {
-      localStorage.setItem(this.KAY_LS, JSON.stringify(this.state.contacts));
+      localStorage.setItem(this.KEY_LS, JSON.stringify(this.state.contacts));
     }
   }
   // === тогл модалки ===
@@ -71,10 +72,10 @@ export class App extends Component {
     });
     if (filteredContacts.length === 0) {
       //! додав помилку якщо контактів по фільтру не знайшли
-      this.open = false;
+      this.state.open = false;
       return;
     }
-    this.open = true;
+    this.state.open = true;
 
     return filteredContacts;
   };
@@ -105,7 +106,7 @@ export class App extends Component {
               <h2 style={{ textAlign: 'center' }}>Contacts</h2>
               <Filter value={filter} onChange={this.onFilterChange} />
               <Contacts
-                isOpen={this.open}
+                isOpen={this.state.open}
                 contacts={filteredContacts}
                 onDeleteContacts={this.deleteContact}
               />
